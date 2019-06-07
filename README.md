@@ -39,3 +39,5 @@ Activate the virtual environment
 pip install -r requirements.txt
 ```
 
+## Contributing
+Please read [CONTRIBUTING.md](https://github.com/jkuatdsc/pw-dsc_website/blob/master/CONTRIBUTING.md) for details on contribution, and the process for submitting pull requests.
