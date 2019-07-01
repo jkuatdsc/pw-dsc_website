@@ -10,6 +10,11 @@ class Config():
     ENV = 'development'
     SECRET_KEY = 'thisisasecretkey'
 
+    MONGODB_SETTINGS = {
+        'host': 'localhost',
+        'db': 'dscweb'
+    }
+
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -18,6 +23,12 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     DEBUG = True
     TESTING = True
+    
+    MONGODB_SETTINGS = {
+        'host': 'localhost',
+        'db': 'dscwebtest'
+    }
+
 
 
 config = {
