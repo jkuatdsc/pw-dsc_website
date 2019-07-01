@@ -1,4 +1,8 @@
+from flask_bcrypt import Bcrypt
+
 from core import db
+
+mycrypt = Bcrypt()
 
 class User(db.Document):
     email = db.EmailField(
@@ -9,10 +13,25 @@ class User(db.Document):
         required = True,
         unique = True
     )
-    password = db.StringField(
+    password_hash = db.StringField(
         required = True,
     )
     meta = {
         # set name of the collection
         'collection': 'users'
     }
+    """
+    call to user's object password attribute will raise AttributeError
+    """
+    @property
+    def password(self):
+        raise AttributeError('password attribute is not readable')
+    """
+    when user password property is assigned, set it to a hashed string
+    """    
+    @password.setter
+    def password(self, password):
+        self.password_hash = mycrypt.generate_password_hash(
+            password).decode()
+
+        
