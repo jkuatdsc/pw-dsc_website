@@ -7,7 +7,7 @@ from flask_restful import Api
 db = MongoEngine()
 
 from .config import config
-from accounts.views import Register
+from accounts.views import Register, Login
 
 def create_app(config_name='default'):
     app = Flask(__name__)
@@ -18,6 +18,7 @@ def create_app(config_name='default'):
     api = Api(app)
     
     api.add_resource(Register, '/register')
+    api.add_resource(Login, '/login')
     
 
     return app

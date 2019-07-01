@@ -26,8 +26,12 @@ class UserTestCase(TestCase):
         self.assertEqual(res.status_code, 201)
 
     def test_user_can_login(self):
-        res = self.test_client.post(
+        reg_res = self.test_client.post(
+            'http://localhost:5000/register',
+            json = USER
+        )
+        login_res = self.test_client.post(
             'http://localhost:5000/login',
             json = USER
         )
-        self.assertEqual(res.status_code, 302)
+        self.assertEqual(login_res.status_code, 302)

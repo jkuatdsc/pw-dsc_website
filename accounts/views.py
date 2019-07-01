@@ -49,3 +49,22 @@ class Register(Resource):
             msg='User created successfully'
         ), 201)
 
+
+class Login(Resource):
+    def post(self):
+        data = parser.parse_args()
+        
+        user = User.objects(username=data['username']).first()
+        if not user:
+            return make_response(jsonify(
+                msg = 'User does not exist'
+            ), 400)
+        elif not user.verify_password(user.password_hash, data['password']):
+            return make_response(jsonify(
+                msg = 'You have entered wrong credentials, try again'
+            ), 400)
+
+        return make_response(jsonify(
+            msg='You have logged in as %s' % (data['username'])
+        ), 302)
+

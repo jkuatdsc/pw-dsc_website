@@ -34,4 +34,6 @@ class User(db.Document):
         self.password_hash = mycrypt.generate_password_hash(
             password).decode()
 
-        
+    @staticmethod
+    def verify_password(hash, password):
+        return mycrypt.check_password_hash(hash, password)
