@@ -35,3 +35,26 @@ class UserTestCase(TestCase):
             json = USER
         )
         self.assertEqual(login_res.status_code, 302)
+
+    def test_get_fresh_token_from_logged_in_user(self):
+        reg_res = self.test_client.post(
+            'http://localhost:5000/register',
+            json = USER
+        )
+        login_res = self.test_client.post(
+            'http://localhost:5000/login',
+            json = USER
+        )
+        login_data = login_res.json
+        refresh_token = login_data['refresh_token']
+
+        headers = {'Authorization': f"Bearer {refresh_token}" }
+
+        ref_tok = self.test_client.post(
+            'http://localhost:5000/refresh-token',
+            headers = headers
+        )
+
+        self.assertTrue(ref_tok.json['new_access_token'])
+
+        
