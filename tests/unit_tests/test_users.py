@@ -17,44 +17,45 @@ class UserTestCase(TestCase):
         ## Drop database
         current_db = self.app.config['MONGODB_SETTINGS']['db']
         db.get_connection().drop_database(current_db)
-
-    def test_user_registration(self):
+    
+    """
+    Register and login helpers
+    """
+    def register(self):
         res = self.test_client.post(
             'http://localhost:5000/register',
             json = USER
         )
+        return res
+
+    def login(self):
+        res = self.test_client.post(
+            'http://localhost:5000/login',
+            json = USER
+        )
+        return res
+
+   
+    def test_user_registration(self):
+        res = self.register() 
         self.assertEqual(res.status_code, 201)
 
     def test_user_can_login(self):
-        reg_res = self.test_client.post(
-            'http://localhost:5000/register',
-            json = USER
-        )
-        login_res = self.test_client.post(
-            'http://localhost:5000/login',
-            json = USER
-        )
+        reg_res = self.register()
+        login_res = self.login() 
         self.assertEqual(login_res.status_code, 302)
 
     def test_get_fresh_token_from_logged_in_user(self):
-        reg_res = self.test_client.post(
-            'http://localhost:5000/register',
-            json = USER
-        )
-        login_res = self.test_client.post(
-            'http://localhost:5000/login',
-            json = USER
-        )
-        login_data = login_res.json
-        refresh_token = login_data['refresh_token']
+        reg_res = self.register()
+        login_res = self.login()
 
+        refresh_token = login_res.json['refresh_token']
         headers = {'Authorization': f"Bearer {refresh_token}" }
 
         ref_tok = self.test_client.post(
             'http://localhost:5000/refresh-token',
             headers = headers
         )
-
         self.assertTrue(ref_tok.json['new_access_token'])
 
         
