@@ -2,6 +2,12 @@ from unittest import TestCase
 
 from core import create_app, db
 
+USER = {
+    'email': 'jonnieey@gmail.com',
+    'username': 'jonnieey',
+    'password': 'password'
+}
+
 class UserTestCase(TestCase):
     def setUp(self):
         self.app = create_app(config_name='testing')
@@ -15,10 +21,13 @@ class UserTestCase(TestCase):
     def test_user_registration(self):
         res = self.test_client.post(
             'http://localhost:5000/register',
-            json = {
-                'email': 'jonnieey@gmail.com',
-                'username': 'jonnieey',
-                'password': 'password'
-            }
+            json = USER
         )
         self.assertEqual(res.status_code, 201)
+
+    def test_user_can_login(self):
+        res = self.test_client.post(
+            'http://localhost:5000/login',
+            json = USER
+        )
+        self.assertEqual(res.status_code, 302)
