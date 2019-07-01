@@ -1,6 +1,9 @@
 from flask import jsonify, make_response
 
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import (
+    create_access_token, create_refresh_token, 
+)    
 
 from accounts.models import User
 
@@ -53,7 +56,7 @@ class Register(Resource):
 class Login(Resource):
     def post(self):
         data = parser.parse_args()
-        
+        # Get user 
         user = User.objects(username=data['username']).first()
         if not user:
             return make_response(jsonify(
@@ -63,8 +66,17 @@ class Login(Resource):
             return make_response(jsonify(
                 msg = 'You have entered wrong credentials, try again'
             ), 400)
+        
+        """
+        Set the token as fresh to allow changing of critical information
+        such as passwords, username etc. in a resource where stale tokens
+        are rejected.
+        """
+        access_token = create_access_token(identity=user, fresh=True)
+        refresh_token = create_refresh_token(identity=user)
 
         return make_response(jsonify(
-            msg='You have logged in as %s' % (data['username'])
+            msg='You have logged in as %s' % (data['username']),
+            access_token=access_token,
+            refresh_token=refresh_token
         ), 302)
-
