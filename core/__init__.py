@@ -8,7 +8,7 @@ from flask_jwt_extended import JWTManager
 db = MongoEngine()
 
 from .config import config
-from accounts.views import Register, Login
+from accounts.views import Register, Login, RefreshAccessToken
 
 def create_app(config_name='default'):
     app = Flask(__name__)
@@ -20,6 +20,7 @@ def create_app(config_name='default'):
     
     api.add_resource(Register, '/register')
     api.add_resource(Login, '/login')
+    api.add_resource(RefreshAccessToken, '/refresh-token')
     
     return app
 
