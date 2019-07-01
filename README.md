@@ -4,11 +4,10 @@
 
 ```
  - python3
- -flask
+ - flask
  - mongodb
  - git
  - pip
- - pymodm
 ```
 
 ## Quick Setup
