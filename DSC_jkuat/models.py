@@ -22,7 +22,7 @@ class Article(db.Document):
         # and author when user is deleted
         reverse_delete_rule = db.NULLIFY
     )
-    created = db.ComlexDateTimeField(
+    created = db.ComplexDateTimeField(
         default = datetime.utcnow()
     )
     # Implement to support images, and other media 

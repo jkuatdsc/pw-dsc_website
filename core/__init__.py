@@ -9,6 +9,7 @@ db = MongoEngine()
 
 from .config import config
 from accounts.views import Register, Login, RefreshAccessToken
+from DSC_jkuat.views import CreateArticle
 
 def create_app(config_name='default'):
     app = Flask(__name__)
@@ -21,6 +22,7 @@ def create_app(config_name='default'):
     api.add_resource(Register, '/register')
     api.add_resource(Login, '/login')
     api.add_resource(RefreshAccessToken, '/refresh-token')
+    api.add_resource(CreateArticle, '/article')
     
     return app
 
