@@ -44,6 +44,18 @@ class CreateArticle(Resource):
         new_article.save()
 
         return make_response(jsonify(
-            msg='article has been successfully created'
+            msg='article has been successfully created',
+            article = new_article
         ), 201)
 
+class GetArticle(Resource):
+    def get(self, article_id):
+        article = Article.objects(pk=article_id).first()
+        if not article:
+            return make_response(jsonify(
+                msg='That article does not exist'
+            ), 400)
+        return make_response(jsonify(
+            article = article
+        ), 200)
+        
