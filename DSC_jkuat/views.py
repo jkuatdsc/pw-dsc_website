@@ -59,3 +59,9 @@ class GetArticle(Resource):
             article = article
         ), 200)
         
+class GetAllArticles(Resource):
+    def get(self):
+        articles = Article.objects()
+        return make_response(jsonify(
+            articles = articles
+        ), 200)

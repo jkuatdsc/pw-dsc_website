@@ -87,7 +87,7 @@ class ArticleTestCase(TestCase):
         self.register()
         refresh_token = self.login().json['refresh_token']
 
-        for article in range(0, 5+1):
+        for article in range(0, 5):
            self.test_client.post(
             self.url_helper('article'),
             headers = {'Authorization': 'Bearer %s' % (refresh_token)},
@@ -98,3 +98,4 @@ class ArticleTestCase(TestCase):
             self.url_helper('articles')
         )
         self.assertEqual(res.status_code, 200)
+        self.assertEqual(len(res.json['articles']), 5)
