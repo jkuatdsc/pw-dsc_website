@@ -6,6 +6,13 @@ USER = {
     'username': 'jonnieey',
     'password': 'password'
 }
+ARTICLE = {
+    'title': 'Kuroko no basket',
+    'description': 'Sports anime',
+    'content' : 'This is the best sports anime',
+}
+BASE_URL = 'http://localhost:5000'
+
 class ArticleTestCase(TestCase):
     def setUp(self):
         self.app = create_app(config_name='testing')
@@ -15,15 +22,18 @@ class ArticleTestCase(TestCase):
         current_db = self.app.config['MONGODB_SETTINGS']['db']
         db.get_connection().drop_database(current_db)
     
+    def url_helper(self, url):
+        return '%s/%s' % (BASE_URL, url)
+
     def register(self):
         res = self.test_client.post(
-            'http://localhost:5000/register',
+            self.url_helper('register'),
             json = USER
         )
         return res
     def login(self):
         res = self.test_client.post(
-            'http://localhost:5000/login',
+            self.url_helper('login'),
             json = USER
         )
         return res
@@ -33,13 +43,9 @@ class ArticleTestCase(TestCase):
         refresh_token = self.login().json['refresh_token']
 
         res = self.test_client.post(
-            'http://localhost:5000/article',
+            self.url_helper('article'),
             headers = {'Authorization': f"Bearer {refresh_token}"},
-            json = {
-                'title': 'Kuroko no basket',
-                'description': 'Sports anime',
-                'content' : 'This is the best sports anime',
-            }
+            json = ARTICLE
         )
         self.assertEqual(res.status_code, 201)
 
@@ -47,18 +53,19 @@ class ArticleTestCase(TestCase):
         self.register()
         refresh_token = self.login().json['refresh_token']
 
+        cust_art = ARTICLE.copy()
+        cust_art.pop('content')
+
         res = self.test_client.post(
-            'http://localhost:5000/article',
+            self.url_helper('article'),
             headers = {'Authorization': f"Bearer {refresh_token}"},
-            json = {
-                'title': 'Kuroko no basket',
-                'description': 'Sports anime',
-            }
+            json = cust_art
         )
         self.assertEqual(res.status_code, 400)
     
     def  test_create_article_without_login(self):
         res = self.test_client.post(
-            'http://localhost:5000/article'
+            self.url_helper('article')
         )
         self.assertEqual(res.status_code, 401)
+    
