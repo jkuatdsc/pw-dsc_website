@@ -69,3 +69,16 @@ class ArticleTestCase(TestCase):
         )
         self.assertEqual(res.status_code, 401)
     
+    def test_get_article_by_id(self):
+        self.register()
+        refresh_token = self.login().json['refresh_token']
+        new_article = self.test_client.post(
+            self.url_helper('article'),
+            headers = {'Authorization': 'Bearer %s' % (refresh_token)},
+            json = ARTICLE
+        )
+        new_article_pk = new_article.json['article']['_id']['$oid']
+        res = self.test_client.get(
+            self.url_helper('articles/%s' % (new_article_pk))
+        )
+        self.assertEqual(res.status_code, 200)
