@@ -1,7 +1,7 @@
 from core import create_app, db
 from unittest import TestCase
 
-USER = {
+USER1 = {
     'email': 'jonnieey@gmail.com',
     'username': 'jonnieey',
     'password': 'password'
@@ -25,22 +25,22 @@ class ArticleTestCase(TestCase):
     def url_helper(self, url):
         return '%s/%s' % (BASE_URL, url)
 
-    def register(self):
+    def register(self, user):
         res = self.test_client.post(
             self.url_helper('register'),
-            json = USER
+            json = user
         )
         return res
-    def login(self):
+    def login(self, user):
         res = self.test_client.post(
             self.url_helper('login'),
-            json = USER
+            json = user
         )
         return res
 
     def test_user_can_create_article(self):
-        self.register()
-        refresh_token = self.login().json['refresh_token']
+        self.register(USER1)
+        refresh_token = self.login(USER1).json['refresh_token']
 
         res = self.test_client.post(
             self.url_helper('article'),
@@ -50,8 +50,8 @@ class ArticleTestCase(TestCase):
         self.assertEqual(res.status_code, 201)
 
     def test_user_can_create_article_without_content(self):
-        self.register()
-        refresh_token = self.login().json['refresh_token']
+        self.register(USER1)
+        refresh_token = self.login(USER1).json['refresh_token']
 
         cust_art = ARTICLE.copy()
         cust_art.pop('content')
@@ -70,8 +70,8 @@ class ArticleTestCase(TestCase):
         self.assertEqual(res.status_code, 401)
     
     def test_get_article_by_id(self):
-        self.register()
-        refresh_token = self.login().json['refresh_token']
+        self.register(USER1)
+        refresh_token = self.login(USER1).json['refresh_token']
         new_article = self.test_client.post(
             self.url_helper('article'),
             headers = {'Authorization': 'Bearer %s' % (refresh_token)},
@@ -84,8 +84,8 @@ class ArticleTestCase(TestCase):
         self.assertEqual(res.status_code, 200)
     
     def test_get_all_articles(self):
-        self.register()
-        refresh_token = self.login().json['refresh_token']
+        self.register(USER1)
+        refresh_token = self.login(USER1).json['refresh_token']
 
         for article in range(0, 5):
            self.test_client.post(
@@ -93,7 +93,6 @@ class ArticleTestCase(TestCase):
             headers = {'Authorization': 'Bearer %s' % (refresh_token)},
             json = ARTICLE
            )
-        
         res = self.test_client.get(
             self.url_helper('articles')
         )
