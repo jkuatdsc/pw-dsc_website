@@ -65,3 +65,17 @@ class GetAllArticles(Resource):
         return make_response(jsonify(
             articles = articles
         ), 200)
+
+class GetUserArticles(Resource):
+    def get(self, username):
+        author = User.objects(username=username).first()
+        if not author:
+            return make_response(jsonify(
+                msg='User %s does not exist' % (username)
+            ), 400)
+
+        user_articles = Article.objects(author=author)
+        return make_response(jsonify(
+            user_articles = user_articles
+        ), 200)
+

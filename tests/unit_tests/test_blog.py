@@ -123,7 +123,6 @@ class ArticleTestCase(TestCase):
                     headers={'Authorization': 'Bearer %s' % (refresh_token)},
                     json = ARTICLE
                 )
-        
         res = self.test_client.get(
             self.url_helper('/users/anderson/articles')
         )
