@@ -6,7 +6,6 @@ USER = {
     'username': 'jonnieey',
     'password': 'password'
 }
-
 class ArticleTestCase(TestCase):
     def setUp(self):
         self.app = create_app(config_name='testing')
@@ -43,3 +42,23 @@ class ArticleTestCase(TestCase):
             }
         )
         self.assertEqual(res.status_code, 201)
+
+    def test_user_can_create_article_without_content(self):
+        self.register()
+        refresh_token = self.login().json['refresh_token']
+
+        res = self.test_client.post(
+            'http://localhost:5000/article',
+            headers = {'Authorization': f"Bearer {refresh_token}"},
+            json = {
+                'title': 'Kuroko no basket',
+                'description': 'Sports anime',
+            }
+        )
+        self.assertEqual(res.status_code, 400)
+    
+    def  test_create_article_without_login(self):
+        res = self.test_client.post(
+            'http://localhost:5000/article'
+        )
+        self.assertEqual(res.status_code, 401)
