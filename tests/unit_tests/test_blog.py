@@ -82,3 +82,19 @@ class ArticleTestCase(TestCase):
             self.url_helper('articles/%s' % (new_article_pk))
         )
         self.assertEqual(res.status_code, 200)
+    
+    def test_get_all_articles(self):
+        self.register()
+        refresh_token = self.login().json['refresh_token']
+
+        for article in range(0, 5+1):
+           self.test_client.post(
+            self.url_helper('article'),
+            headers = {'Authorization': 'Bearer %s' % (refresh_token)},
+            json = ARTICLE
+           )
+        
+        res = self.test_client.get(
+            self.url_helper('articles')
+        )
+        self.assertEqual(res.status_code, 200)
