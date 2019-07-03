@@ -3,7 +3,6 @@ from flask_restful import Resource, reqparse
 from flask_jwt_extended import (
     jwt_refresh_token_required, get_jwt_identity
 )    
-
 from accounts.models import User
 from DSC_jkuat.models import Article
 
@@ -12,9 +11,8 @@ parser = reqparse.RequestParser()
 parser.add_argument(
     'content',
     required = True,
-    help = 'Content attribute is required'
+    help = 'Bad request: {error_msg}'
 )
-
 class CreateArticle(Resource):
 
     @jwt_refresh_token_required
@@ -23,12 +21,12 @@ class CreateArticle(Resource):
         article_parser.add_argument(
             'title',
             required = True,
-            help = 'Title attribute is required'
+            help = 'Bad request: {error_msg}'  
         )
         article_parser.add_argument(
             'description',
             required = True,
-            help = 'Title attribute is required'
+            help = 'Bad request: {error_msg}'
         )
         data = article_parser.parse_args()
         current_user = get_jwt_identity()
