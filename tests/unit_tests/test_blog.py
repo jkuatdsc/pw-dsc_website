@@ -6,6 +6,11 @@ USER1 = {
     'username': 'jonnieey',
     'password': 'password'
 }
+USER2 = {
+    'email': 'anderson@gmail.com',
+    'username': 'anderson',
+    'password': 'password'
+}
 ARTICLE = {
     'title': 'Kuroko no basket',
     'description': 'Sports anime',
@@ -98,3 +103,29 @@ class ArticleTestCase(TestCase):
         )
         self.assertEqual(res.status_code, 200)
         self.assertEqual(len(res.json['articles']), 5)
+    
+    def test_get_user_articles(self):
+        user1 = self.register(USER1)
+        user2 = self.register(USER2)
+
+        refresh_token1 = self.login(USER1).json['refresh_token']
+        refresh_token2 = self.login(USER2).json['refresh_token']
+
+        for user in USER1, USER2:
+            if user ==  USER1:
+                refresh_token = refresh_token1
+            else:
+                refresh_token = refresh_token2
+
+            for article in range(3):
+                self.test_client.post(
+                    self.url_helper('article'),
+                    headers={'Authorization': 'Bearer %s' % (refresh_token)},
+                    json = ARTICLE
+                )
+        
+        res = self.test_client.get(
+            self.url_helper('/users/anderson/articles')
+        )
+        self.assertEqual(res.status_code, 200)
+
