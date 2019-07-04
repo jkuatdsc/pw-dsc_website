@@ -9,9 +9,12 @@ manager.add_command('runserver', Server())
 
 ## improve to use flask-cli command
 @manager.command
-def test():
+def test(test_name):
     "Run tests"
-    subprocess.run(['nose2', '-v'])
+    if test_name:
+        subprocess.run(['nose2', 'tests.unit_tests.%s' % (test_name), '-v'])
+    else:
+        subprocess.run(['nose2', '-v'])
 
 if __name__ == '__main__':
     manager.run()
