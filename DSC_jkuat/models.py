@@ -39,5 +39,30 @@ class Article(db.Document):
     }
 
 
-    
+class Comment(db.Document):
+    """
+    Model for comment collection 
+    """
+    article = db.ReferenceField(
+        'Article',
+        required = True,
+        reverse_delete_rule = db.CASCADE
+    )
+    author = db.ReferenceField(
+        'User',
+        required = True,
+        reverse_delete_rule = db.NULLIFY
+    )
+    created = db.ComplexDateTimeField(
+        default = datetime.utcnow()
+    )
+    content = db.StringField(
+        required = True
+    )
+
+    meta = {
+        'collection': 'comments',
+        'ordering': ['-created']
+    }
+
 
