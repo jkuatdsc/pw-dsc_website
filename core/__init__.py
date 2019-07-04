@@ -10,7 +10,8 @@ db = MongoEngine()
 from .config import config
 from accounts.views import Register, Login, RefreshAccessToken
 from DSC_jkuat.views import (
-    CreateArticle, GetArticle, GetAllArticles, GetUserArticles
+    CreateArticle, GetArticle, GetAllArticles, GetUserArticles,
+    CreateComment
 )    
 
 def create_app(config_name='default'):
@@ -27,6 +28,7 @@ def create_app(config_name='default'):
     api.add_resource(CreateArticle, '/article')
     api.add_resource(GetArticle, '/articles/<string:article_id>')
     api.add_resource(GetAllArticles, '/articles')
-    api.add_resource(GetUserArticles, '/users/<string:username>/articles')    
+    api.add_resource(GetUserArticles, '/users/<string:username>/articles')
+    api.add_resource(CreateComment, '/articles/<string:article_id>/comment') 
     return app
 

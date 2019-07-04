@@ -4,7 +4,7 @@ from flask_jwt_extended import (
     jwt_refresh_token_required, get_jwt_identity
 )    
 from accounts.models import User
-from DSC_jkuat.models import Article
+from DSC_jkuat.models import Article, Comment
 
 parser = reqparse.RequestParser()
 
@@ -78,4 +78,33 @@ class GetUserArticles(Resource):
         return make_response(jsonify(
             user_articles = user_articles
         ), 200)
+
+class CreateComment(Resource):
+    @jwt_refresh_token_required
+    def post(self, article_id):
+        data = parser.parse_args()
+        current_user = get_jwt_identity()
+
+        user = User.objects(username=current_user['username']).first()
+        if not user:
+            return make_response(jsonify(
+                msg='User %s does not exist' % (current_user['username'])
+            ), 400)
+        
+        article = Article.objects(pk=article_id).first()
+        if not article:
+            return make_response(jsonify(
+                msg = 'Article does not exist'
+            ), 400)
+        
+        new_comment = Comment()
+        new_comment.author = user
+        new_comment.article = article
+        new_comment.content = data['content']
+        new_comment.save()
+        
+        return make_response(jsonify(
+            msg = 'Comment has been created successfully' 
+        ), 201)
+        
 

@@ -56,12 +56,12 @@ class CommentTestCase(TestCase):
         )
         return login_res
 
-    def test_comment(self):
+    def test_create_comment(self):
         article_id = self.test_article.json['article']['_id']['$oid']
         headers = {'Authorization': 'Bearer %s' % (self.refresh_token)}
 
         res = self.test_client.post(
-            self.url_helper('/articles/%s/comment'% {article_id}),
+            self.url_helper('/articles/%s/comment'% (article_id)),
             headers = headers,
             json = COMMENT
         )
