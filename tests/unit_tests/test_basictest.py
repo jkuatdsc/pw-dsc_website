@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from flask import Flask
 
-from core import create_app
+from apps.core import create_app
 
 class BasicTestTestCase(TestCase):
     def setUp(self):

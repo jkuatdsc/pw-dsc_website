@@ -3,7 +3,6 @@ Configuration for the flask app
 THIS IS FOR DEVELOPMENT PURPOSES ONLY
 DO NOT USE IN PRODUCTION
 """
-
 class Config():
     DEBUG = False
     TESTING = False
@@ -14,11 +13,8 @@ class Config():
         'host': 'localhost',
         'db': 'dscweb'
     }
-
-
 class DevelopmentConfig(Config):
     DEBUG = True
-
 
 class TestingConfig(Config):
     DEBUG = True
@@ -28,8 +24,6 @@ class TestingConfig(Config):
         'host': 'localhost',
         'db': 'dscwebtest'
     }
-
-
 
 config = {
     'default': DevelopmentConfig,

@@ -8,15 +8,19 @@ from flask_jwt_extended import JWTManager
 db = MongoEngine()
 
 from .config import config
-from accounts.views import Register, Login, RefreshAccessToken
-from DSC_jkuat.views import (
+from apps.accounts.views import (
+    Register, Login, RefreshAccessToken
+)
+from apps.DSC_jkuat.views import (
     CreateArticle, GetArticle, GetAllArticles, GetUserArticles,
     CreateComment
 )    
 
-def create_app(config_name='default'):
-    app = Flask(__name__)
+def create_app(config_name):
+    app = Flask(__name__, instance_relative_config=True)
+
     app.config.from_object(config[config_name])
+    app.config.from_pyfile('config.py')
 
     db.init_app(app)
     jwt = JWTManager(app)

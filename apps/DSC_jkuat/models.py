@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from core import db
-from accounts.models import User
+from apps.core import db
+from apps.accounts.models import User
 
 class Article(db.Document):
     """

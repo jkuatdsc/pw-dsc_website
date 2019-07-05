@@ -1,6 +1,6 @@
 from flask_bcrypt import Bcrypt
 
-from core import db
+from apps.core import db
 
 mycrypt = Bcrypt()
 

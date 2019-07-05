@@ -4,3 +4,4 @@ instance/
 *.sw*
 *.pyc
 __pycache__
+instance/

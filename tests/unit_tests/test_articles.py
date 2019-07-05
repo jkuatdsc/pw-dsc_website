@@ -1,4 +1,4 @@
-from core import create_app, db
+from apps.core import create_app, db
 from unittest import TestCase
 
 USER1 = {

@@ -3,8 +3,8 @@ from flask_restful import Resource, reqparse
 from flask_jwt_extended import (
     jwt_refresh_token_required, get_jwt_identity
 )    
-from accounts.models import User
-from DSC_jkuat.models import Article, Comment
+from apps.accounts.models import User
+from apps.DSC_jkuat.models import Article, Comment
 
 parser = reqparse.RequestParser()
 

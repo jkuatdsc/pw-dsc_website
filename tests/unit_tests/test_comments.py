@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from core import create_app, db
+from apps.core import create_app, db
+
 USER = {
     'email': 'jonnieey@gmail.com',
     'username': 'jonnieey',
